@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الحساب - فري فاير ماركت</title>
+    <meta name="description" content="تفاصيل حساب فري فاير في سوق حسابات فري فاير">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/images/logo.png" alt="شعار فري فاير ماركت">
+                        <span>فري فاير ماركت</span>
+                    </a>
+                </div>
+                
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="privacy.html">الخصوصية</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-actions">
+                    <a href="dashboard-trader.html" class="btn btn-secondary">لوحة التاجر</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- القائمة الجانبية -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>التصنيفات</h3>
+            <button class="close-sidebar" id="closeSidebar" aria-label="إغلاق القائمة">×</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#" data-category="all">جميع الحسابات</a></li>
+                <li><a href="#" data-category="heroic">بطولية</a></li>
+                <li><a href="#" data-category="legendary">أسطورية</a></li>
+                <li><a href="#" data-category="mythic">أسطوري+</a></li>
+                <li><a href="#" data-category="rare">نادرة</a></li>
+                <li><a href="#" data-category="special">خاصة</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main">
+        <!-- سلايدر الصور -->
+        <section class="account-slider" id="accountSlider">
+            <!-- سيتم تعبئة السلايدر عبر JavaScript -->
+        </section>
+
+        <!-- تفاصيل الحساب -->
+        <section class="account-details">
+            <div class="container">
+                <div class="account-info" id="accountInfo">
+                    <!-- سيتم تعبئة معلومات الحساب عبر JavaScript -->
+                </div>
+                
+                <!-- جدول المواصفات -->
+                <div class="specifications">
+                    <h3>مواصفات الحساب</h3>
+                    <table class="specs-table" id="specsTable">
+                        <!-- سيتم تعبئة الجدول عبر JavaScript -->
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- شريط الأزرار التفاعلية -->
+    <div class="interaction-bar">
+        <div class="container">
+            <div class="interaction-content">
+                <div class="interaction-actions">
+                    <button class="interaction-btn like-btn" id="likeBtn" aria-label="إعجاب">
+                        <span class="icon">❤️</span>
+                        <span class="count" id="likeCount">0</span>
+                    </button>
+                    <button class="interaction-btn comment-btn" id="commentBtn" aria-label="تعليق">
+                        <span class="icon">💬</span>
+                        <span class="count" id="commentCount">0</span>
+                    </button>
+                    <button class="interaction-btn share-btn" id="shareBtn" aria-label="مشاركة">
+                        <span class="icon">🔗</span>
+                        <span>مشاركة</span>
+                    </button>
+                </div>
+                <button class="btn btn-primary order-btn" id="orderBtn">طلب الحساب</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>فري فاير ماركت</h3>
+                    <p>منصة موثوقة لبيع وشراء حسابات فري فاير بأعلى معايير الأمان والجودة.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="privacy.html">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>التواصل</h4>
+                    <ul>
+                        <li>البريد: info@freefiremarket.com</li>
+                        <li>الهاتف: +216 12 345 678</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 فري فاير ماركت. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نافذة الطلب -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>طلب الحساب</h3>
+                <button class="close-modal" id="closeModal" aria-label="إغلاق النافذة">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="buyerName">اسم المشتري</label>
+                        <input type="text" id="buyerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMethod">طريقة التواصل</label>
+                        <select id="contactMethod" required>
+                            <option value="">اختر طريقة التواصل</option>
+                            <option value="whatsapp">واتساب</option>
+                            <option value="telegram">تيليجرام</option>
+                            <option value="email">البريد الإلكتروني</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactInfo">معلومات التواصل</label>
+                        <input type="text" id="contactInfo" required placeholder="رقم الهاتف أو المعرف">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
