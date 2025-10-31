@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاجر - فري فاير ماركت</title>
+    <meta name="description" content="صفحة التاجر في سوق حسابات فري فاير">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/images/logo.png" alt="شعار فري فاير ماركت">
+                        <span>فري فاير ماركت</span>
+                    </a>
+                </div>
+                
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="privacy.html">الخصوصية</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="user-actions">
+                    <a href="dashboard-trader.html" class="btn btn-secondary">لوحة التاجر</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- القائمة الجانبية -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>التصنيفات</h3>
+            <button class="close-sidebar" id="closeSidebar" aria-label="إغلاق القائمة">×</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#" data-category="all">جميع الحسابات</a></li>
+                <li><a href="#" data-category="heroic">بطولية</a></li>
+                <li><a href="#" data-category="legendary">أسطورية</a></li>
+                <li><a href="#" data-category="mythic">أسطوري+</a></li>
+                <li><a href="#" data-category="rare">نادرة</a></li>
+                <li><a href="#" data-category="special">خاصة</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main">
+        <!-- غلاف التاجر -->
+        <section class="trader-cover" id="traderCover">
+            <!-- سيتم تعبئة الغلاف عبر JavaScript -->
+        </section>
+
+        <!-- معلومات التاجر -->
+        <section class="trader-info">
+            <div class="container">
+                <div class="trader-details" id="traderDetails">
+                    <!-- سيتم تعبئة معلومات التاجر عبر JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- فلتر الحسابات -->
+        <section class="accounts-filter">
+            <div class="container">
+                <div class="filter-content">
+                    <h3>فلتر الحسابات</h3>
+                    <div class="filter-options">
+                        <div class="filter-group">
+                            <label for="priceFilter">السعر</label>
+                            <select id="priceFilter">
+                                <option value="all">جميع الأسعار</option>
+                                <option value="0-50">أقل من 50 دينار</option>
+                                <option value="50-100">50 - 100 دينار</option>
+                                <option value="100-200">100 - 200 دينار</option>
+                                <option value="200+">أكثر من 200 دينار</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="levelFilter">المستوى</label>
+                            <select id="levelFilter">
+                                <option value="all">جميع المستويات</option>
+                                <option value="1-20">1 - 20</option>
+                                <option value="21-40">21 - 40</option>
+                                <option value="41-60">41 - 60</option>
+                                <option value="60+">أكثر من 60</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="categoryFilter">الفئة</label>
+                            <select id="categoryFilter">
+                                <option value="all">جميع الفئات</option>
+                                <option value="heroic">بطولية</option>
+                                <option value="legendary">أسطورية</option>
+                                <option value="mythic">أسطوري+</option>
+                                <option value="rare">نادرة</option>
+                                <option value="special">خاصة</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="applyFilter">تطبيق الفلتر</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- حسابات التاجر -->
+        <section class="trader-accounts">
+            <div class="container">
+                <h2 class="section-title">حسابات التاجر</h2>
+                <div class="accounts-grid" id="traderAccountsGrid">
+                    <!-- سيتم تعبئة حسابات التاجر عبر JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>فري فاير ماركت</h3>
+                    <p>منصة موثوقة لبيع وشراء حسابات فري فاير بأعلى معايير الأمان والجودة.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">اتصل بنا</a></li>
+                        <li><a href="privacy.html">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>التواصل</h4>
+                    <ul>
+                        <li>البريد: info@freefiremarket.com</li>
+                        <li>الهاتف: +216 12 345 678</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 فري فاير ماركت. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- نافذة الطلب -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>طلب الحساب</h3>
+                <button class="close-modal" id="closeModal" aria-label="إغلاق النافذة">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label for="buyerName">اسم المشتري</label>
+                        <input type="text" id="buyerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMethod">طريقة التواصل</label>
+                        <select id="contactMethod" required>
+                            <option value="">اختر طريقة التواصل</option>
+                            <option value="whatsapp">واتساب</option>
+                            <option value="telegram">تيليجرام</option>
+                            <option value="email">البريد الإلكتروني</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactInfo">معلومات التواصل</label>
+                        <input type="text" id="contactInfo" required placeholder="رقم الهاتف أو المعرف">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
