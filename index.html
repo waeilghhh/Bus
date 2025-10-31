@@ -1,157 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>استبيان النقل العام</title>
-  <style>
-    body {
-      font-family: "Cairo", sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      background: white;
-      margin: 40px auto;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #00796b;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 15px 0 5px;
-    }
-    select, textarea, input[type="radio"] {
-      width: 100%;
-      margin: 5px 0;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-    button {
-      background-color: #00796b;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 20px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #004d40;
-      transform: scale(1.03);
-    }
-    .question {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>📋 استبيان حول النقل العمومي</h2>
-
-    <form id="surveyForm">
-
-      <div class="question">
-        <label>1️⃣ تستعمل الحافلة العمومية بصفة منتظمة؟</label>
-        <input type="radio" name="bus_use" value="نعم"> نعم<br>
-        <input type="radio" name="bus_use" value="لا"> لا
-      </div>
-
-      <div class="question">
-        <label>2️⃣ قدّاش تقضي وقت في انتظار الحافلة تقريباً يومياً؟</label>
-        <select name="waiting_time" required>
-          <option value="">اختر...</option>
-          <option>أقل من 10 دقايق</option>
-          <option>10–20 دقيقة</option>
-          <option>20–40 دقيقة</option>
-          <option>40–60 دقيقة</option>
-          <option>+60 دقيقة</option>
-        </select>
-      </div>
-
-      <div class="question">
-        <label>3️⃣ شنوّي صعوبات الرئيسية لما تستنى الحافلة؟</label>
-        <input type="checkbox" name="problem" value="انتظار طويل"> انتظار طويل<br>
-        <input type="checkbox" name="problem" value="ما تعرفش وقت وصولها"> ما تعرفش وقت وصولها<br>
-        <input type="checkbox" name="problem" value="زحمة كبيرة"> زحمة كبيرة<br>
-        <input type="checkbox" name="problem" value="أمان وسلامة"> أمان وسلامة<br>
-        <input type="checkbox" name="problem" value="غيره"> غيره
-      </div>
-
-      <div class="question">
-        <label>4️⃣ لو كان فمّا طريقة تخليك تعرف تقريباً وقت وصول الحافلة، قداش يهمّك؟</label>
-        <input type="radio" name="importance" value="ما يهمّنيش"> ما يهمّنيش<br>
-        <input type="radio" name="importance" value="شوية"> شوية<br>
-        <input type="radio" name="importance" value="مهم برشا"> مهم برشا
-      </div>
-
-      <div class="question">
-        <label>5️⃣ أي نوع خدمة تفضّل؟</label>
-        <input type="radio" name="service_type" value="مجانية مع إعلانات"> مجانية مع إعلانات<br>
-        <input type="radio" name="service_type" value="مدفوعة بلا إعلانات"> مدفوعة بلا إعلانات<br>
-        <input type="radio" name="service_type" value="ما يهمّنيش"> ما يهمّنيش
-      </div>
-
-      <div class="question">
-        <label>6️⃣ لو كانت الخدمة مدفوعة وتكلف 10 دينار في الشهر، هل تشترك؟</label>
-        <input type="radio" name="subscribe" value="نعم"> نعم<br>
-        <input type="radio" name="subscribe" value="ربما"> ربما<br>
-        <input type="radio" name="subscribe" value="لا"> لا
-      </div>
-
-      <div class="question">
-        <label>7️⃣ في أي بلد تقيم حاليًا؟</label>
-        <select name="country" required>
-          <option value="">اختر...</option>
-          <option>تونس</option>
-          <option>الجزائر</option>
-          <option>المغرب</option>
-          <option>ليبيا</option>
-          <option>مصر</option>
-          <option>بلد آخر</option>
-        </select>
-      </div>
-
-      <div class="question">
-        <label>8️⃣ أي اقتراح أو تعليق تحب تشاركنا بيه؟</label>
-        <textarea name="comment" placeholder="اكتب هنا..."></textarea>
-      </div>
-
-      <button type="button" onclick="sendToWhatsApp()">📨 إرسال عبر واتساب</button>
-
-    </form>
-  </div>
-
-  <script>
-    function sendToWhatsApp() {
-      const form = document.getElementById("surveyForm");
-      const data = new FormData(form);
-      let message = "📋 *نتائج الاستبيان:*\n\n";
-
-      data.forEach((value, key) => {
-        message += `• ${key}: ${value}\n`;
-      });
-
-      const phoneNumber = "22655165";
-      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-      window.open(url, "_blank");
-    }
-  </script>
-</body>
-</html>
