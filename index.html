@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد الذكاء الاصطناعي - Gemini</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5ce5;
+            --secondary: #6c757d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .api-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: var(--light);
+            color: var(--dark);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .ai-message .message-time {
+            text-align: left;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
+        }
+
+        .chat-input button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-input button:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .chat-input button:disabled {
+            background-color: var(--secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background-color: var(--light);
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(1) { animation-delay: 0s; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 20px;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        .status-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .status-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info);
+            border: 1px solid var(--info);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 20px;
+        }
+
+        .method-selector {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .method-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .method-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-robot"></i> مساعد الذكاء الاصطناعي</h1>
+            <p>اختر طريقة الاتصال المناسبة</p>
+            
+            <div class="api-info">
+                <div>المفتاح: AIzaSyDpjwGEaOlLgMxghJZWbmRHPUULPHshqoA</div>
+                <div class="method-selector">
+                    <button class="method-btn active" onclick="setMethod('fetch')">الاتصال المباشر</button>
+                    <button class="method-btn" onclick="setMethod('mock')">وضع تجريبي</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai-message">
+                    <div>مرحباً! اختر "الاتصال المباشر" للاتصال بـ Gemini API، أو "وضع تجريبي" للتجربة دون اتصال.</div>
+                    <div class="message-time" id="current-time"></div>
+                </div>
+            </div>
+            
+            <div class="typing-indicator" id="typing-indicator">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="اكتب رسالتك هنا...">
+                <button id="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>تم التطوير باستخدام Gemini API &copy; 2024</p>
+    </footer>
+
+    <script>
+        // إعدادات التطبيق
+        let currentMethod = 'fetch';
+        const API_KEY = "AIzaSyDpjwGEaOlLgMxghJZWbmRHPUULPHshqoA";
+        
+        // عناصر DOM
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const currentTimeElement = document.getElementById('current-time');
+        const methodButtons = document.querySelectorAll('.method-btn');
+
+        // تعيين طريقة الاتصال
+        function setMethod(method) {
+            currentMethod = method;
+            
+            // تحديث الأزرار
+            methodButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let message = '';
+            switch(method) {
+                case 'fetch':
+                    message = '🔗 جاري استخدام الاتصال المباشر مع Gemini API';
+                    break;
+                case 'mock':
+                    message = '✅ تم التبديل إلى الوضع التجريبي (يعمل دون اتصال)';
+                    break;
+            }
+            
+            addStatusMessage(message, 'info');
+        }
+
+        // تحديث الوقت
+        function updateCurrentTime() {
+            const now = new Date();
+            currentTimeElement.textContent = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // إضافة رسالة حالة
+        function addStatusMessage(message, type) {
+            const statusDiv = document.createElement('div');
+            statusDiv.classList.add('status-message', `status-${type}`);
+            statusDiv.textContent = message;
+            chatMessages.appendChild(statusDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // إرسال رسالة - الدالة الرئيسية
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // إضافة رسالة المستخدم
+            addMessage(message, 'user');
+            userInput.value = '';
+            userInput.disabled = true;
+            sendButton.disabled = true;
+            
+            // عرض مؤشر الكتابة
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            try {
+                let response;
+                
+                if (currentMethod === 'fetch') {
+                    response = await fetchGeminiResponse(message);
+                } else {
+                    response = await mockAIResponse(message);
+                }
+                
+                typingIndicator.style.display = 'none';
+                addMessage(response, 'ai');
+                
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                
+                let errorMessage = '❌ حدث خطأ: ';
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    errorMessage += 'مفتاح API غير صالح';
+                } else if (error.message.includes('429')) {
+                    errorMessage += 'تم تجاوز الحد المسموح';
+                } else if (error.message.includes('CORS') || error.message.includes('Network')) {
+                    errorMessage += 'مشكلة في الشبكة. جرب تثبيت إضافة CORS';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                addMessage(errorMessage, 'ai');
+                console.error('Error:', error);
+                
+            } finally {
+                userInput.disabled = false;
+                sendButton.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // الاتصال بـ Gemini API باستخدام Fetch
+        async function fetchGeminiResponse(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{text: prompt}]
+                    }]
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                return data.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('استجابة غير متوقعة من API');
+            }
+        }
+
+        // محاكاة AI (بدون اتصال)
+        async function mockAIResponse(prompt) {
+            // محاكاة وقت الانتظار
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
+            
+            const responses = [
+                `هذا رد تجريبي على سؤالك: "${prompt}". الوضع التجريبي يعمل دون اتصال بالإنترنت.`,
+                `لقد استلمت رسالتك: "${prompt}". في الوضع الحقيقي، سأقوم بتحليل طلبك والرد بشكل ذكي.`,
+                `محاكاة رد ذكي: بناءً على سؤالك "${prompt}"، أعتقد أن... (هذا رد تجريبي)`,
+                `شكراً على سؤالك! "${prompt}" - في الوضع الفعلي، سأقدم لك إجابة دقيقة ومفصلة.`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // إضافة رسالة للشات
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
+            
+            const messageContent = document.createElement('div');
+            messageContent.textContent = text;
+            
+            const messageTime = document.createElement('div');
+            messageTime.classList.add('message-time');
+            messageTime.textContent = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageTime);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // الأحداث - التأكد من أن الدوال متاحة globally
+        document.addEventListener('DOMContentLoaded', function() {
+            // ربط الأحداث بعد تحميل الصفحة
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // التهيئة
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000);
+            addStatusMessage('💡 اختر "وضع تجريبي" للتأكد من عمل الزر', 'info');
+        });
+
+        // جعل الدوال متاحة globally
+        window.sendMessage = sendMessage;
+        window.setMethod = setMethod;
+    </script>
+</body>
+</html>
