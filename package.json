@@ -1,0 +1,8 @@
+{
+  "name": "relationship-counselor",
+  "version": "1.0.0",
+  "description": "مرشد العلاقات الزوجية",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
