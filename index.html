@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مساعد الذكاء الاصطناعي - DeepSeek</title>
+<style>
+  body { font-family: sans-serif; background:#f0f4f8; display:flex; justify-content:center; padding:20px; }
+  .container { width: 100%; max-width: 600px; background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:flex; flex-direction:column; }
+  .chat-messages { flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; height:400px; }
+  .message { padding:10px 15px; border-radius:12px; max-width:80%; line-height:1.4; }
+  .user-message { align-self:flex-end; background:#10b981; color:white; }
+  .ai-message { align-self:flex-start; background:#e5e7eb; color:#1f2937; }
+  .chat-input { display:flex; gap:10px; padding:10px; border-top:1px solid #ddd; }
+  .chat-input input { flex:1; padding:10px 15px; border-radius:30px; border:1px solid #ccc; outline:none; }
+  .chat-input button { padding:10px 15px; border-radius:50%; border:none; background:#10b981; color:white; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input">
+    <input type="text" id="user-input" placeholder="اكتب رسالتك هنا...">
+    <button id="send-button">➡️</button>
+  </div>
+</div>
+
+<script>
+const chatMessages = document.getElementById("chat-messages");
+const userInput = document.getElementById("user-input");
+const sendButton = document.getElementById("send-button");
+
+function addMessage(text, sender) {
+  const msgDiv = document.createElement("div");
+  msgDiv.classList.add("message", sender === "user" ? "user-message" : "ai-message");
+  msgDiv.textContent = text;
+  chatMessages.appendChild(msgDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function sendMessage() {
+  const message = userInput.value.trim();
+  if (!message) return;
+
+  addMessage(message, "user");
+  userInput.value = "";
+  userInput.disabled = true;
+  sendButton.disabled = true;
+
+  try {
+    const res = await fetch("/api/deepseek", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: [
+        { role: "system", content: "أنت مساعد ذكي." },
+        { role: "user", content: message }
+      ] })
+    });
+
+    const data = await res.json();
+
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      addMessage(data.choices[0].message.content, "ai");
+    } else if (data.error) {
+      addMessage("❌ " + data.error, "ai");
+    } else {
+      addMessage("❌ حدث خطأ غير متوقع", "ai");
+    }
+
+  } catch (err) {
+    addMessage("❌ فشل الاتصال بالخادم", "ai");
+  } finally {
+    userInput.disabled = false;
+    sendButton.disabled = false;
+    userInput.focus();
+  }
+}
+
+sendButton.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
+</script>
+</body>
+</html>
