@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد العلاقات الذكي - رومانسي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --primary: #FF6B8B;
+            --primary-dark: #FF4775;
+            --secondary: #8A4FFF;
+            --accent: #00D4FF;
+            --light: #FFF5F7;
+            --dark: #2D3748;
+            --success: #48BB78;
+            --warning: #ED8936;
+            --error: #E53E3E;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --gradient: linear-gradient(135deg, #FF6B8B 0%, #8A4FFF 50%, #00D4FF 100%);
+            --gradient-soft: linear-gradient(135deg, #FFF5F7 0%, #F8F7FF 100%);
+            --border-radius: 20px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--gradient-soft);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 100%;
+            height: 100vh;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* منطقة المحادثة */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: transparent;
+        }
+
+        /* الرسائل */
+        .message {
+            max-width: 90%;
+            padding: 16px 18px;
+            border-radius: 20px;
+            line-height: 1.5;
+            position: relative;
+            animation: messageSlide 0.3s ease;
+            word-wrap: break-word;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--gradient);
+            color: white;
+            border-bottom-right-radius: 8px;
+        }
+
+        .assistant-message {
+            align-self: flex-start;
+            background: var(--card-bg);
+            color: var(--dark);
+            border: 1px solid rgba(138, 79, 255, 0.1);
+            border-bottom-left-radius: 8px;
+        }
+
+        .error-message {
+            align-self: center;
+            background: #FED7D7;
+            color: var(--error);
+            border: 2px solid var(--error);
+            text-align: center;
+            max-width: 95%;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .assistant-message .message-time {
+            text-align: left;
+        }
+
+        /* منطقة الإدخال */
+        .input-container {
+            padding: 20px 15px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            resize: none;
+            min-height: 55px;
+            max-height: 120px;
+            background: #fafafa;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .send-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+        }
+
+        .send-button:active {
+            transform: scale(0.95);
+        }
+
+        .send-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* مؤشر الكتابة */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            color: var(--dark);
+            font-style: italic;
+            margin: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+        }
+
+        /* حالة الاتصال */
+        .connection-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-online {
+            color: var(--success);
+        }
+
+        .status-offline {
+            color: var(--error);
+        }
+
+        /* تحسينات للهواتف */
+        @media (max-width: 480px) {
+            .message {
+                max-width: 95%;
+                padding: 14px 16px;
+            }
+            
+            .chat-input {
+                padding: 14px 18px;
+                min-height: 50px;
+            }
+            
+            .send-button {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div class="connection-status" id="connection-status">
+                <i class="fas fa-circle" id="status-icon"></i>
+                <span id="status-text">جاري الاتصال...</span>
+            </div>
+            <h1><i class="fas fa-robot"></i> مساعد العلاقات الذكي</h1>
+            <p>محلل علاقاتي ذكي يساعدك في تحسين التواصل</p>
+        </div>
+
+        <!-- منطقة المحادثة -->
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message assistant-message">
+                    <div>مرحباً! أنا مساعدك الذكي لتحليل العلاقات وتحسين التواصل 💫</div>
+                    <div style="margin-top: 10px; font-size: 0.9rem;">
+                        يمكنني:
+                        <br>• تحليل نمط التواصل بينك وبين شريكك
+                        <br>• تقديم نصائح لتحسين الحوار
+                        <br>• مساعدتك في حل النزاعات
+                        <br>• اقتراح طرق لتعميق العلاقة
+                    </div>
+                    <div class="message-time">الآن</div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator">
+                <i class="fas fa-brain"></i> المساعد يفكر ويكتب...
+            </div>
+
+            <div class="input-container">
+                <div class="input-row">
+                    <textarea class="chat-input" id="user-input" placeholder="اطرح سؤالك عن العلاقات أو اشرح موقفاً تحتاج مساعدة فيه..." rows="1"></textarea>
+                    <button class="send-button" id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // عناصر DOM
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const connectionStatus = document.getElementById('connection-status');
+        const statusIcon = document.getElementById('status-icon');
+        const statusText = document.getElementById('status-text');
+
+        // حالة الاتصال
+        let isAPIOperational = false;
+
+        // التحقق من حالة API عند التحميل
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        test: true 
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        isAPIOperational = true;
+                        statusIcon.className = 'fas fa-circle status-online';
+                        statusText.textContent = 'API متصل';
+                        connectionStatus.style.background = 'rgba(236, 252, 203, 0.9)';
+                        return;
+                    }
+                }
+                throw new Error('API not working');
+            } catch (error) {
+                isAPIOperational = false;
+                statusIcon.className = 'fas fa-circle status-offline';
+                statusText.textContent = 'API غير متصل';
+                connectionStatus.style.background = 'rgba(254, 215, 215, 0.9)';
+                console.log('API Status: Offline');
+            }
+        }
+
+        // إرسال رسالة
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // إضافة رسالة المستخدم
+            addMessage(message, 'user');
+            userInput.value = '';
+            sendButton.disabled = true;
+
+            // ضبط ارتفاع textarea
+            userInput.style.height = 'auto';
+
+            // عرض مؤشر الكتابة
+            typingIndicator.style.display = 'block';
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: message 
+                    })
+                });
+
+                const data = await response.json();
+                typingIndicator.style.display = 'none';
+
+                if (data.success && data.reply) {
+                    addMessage(data.reply, 'assistant');
+                } else {
+                    throw new Error(data.error || 'حدث خطأ غير معروف');
+                }
+
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                addMessage(`❌ خطأ في الاتصال: ${error.message}`, 'error');
+                console.error('Error:', error);
+            } finally {
+                sendButton.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // إضافة رسالة للشات
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            
+            if (type === 'user') {
+                messageDiv.classList.add('message', 'user-message');
+            } else if (type === 'error') {
+                messageDiv.classList.add('message', 'error-message');
+            } else {
+                messageDiv.classList.add('message', 'assistant-message');
+            }
+            
+            const messageContent = document.createElement('div');
+            messageContent.innerHTML = text.replace(/\n/g, '<br>');
+            
+            const messageTime = document.createElement('div');
+            messageTime.classList.add('message-time');
+            messageTime.textContent = new Date().toLocaleTimeString('ar-EG', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageTime);
+            chatMessages.appendChild(messageDiv);
+            
+            // التمرير للأسفل
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // تحسين textarea التلقائي
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // إرسال بالإنتر
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // إرسال بالزر
+        sendButton.addEventListener('click', sendMessage);
+
+        // التهيئة
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق من حالة API
+            checkAPIStatus();
+            
+            // رسالة ترحيبية
+            setTimeout(() => {
+                if (isAPIOperational) {
+                    addMessage("💬 اشرح لي أي موقف أو تحدي في علاقتك، وسأساعدك في تحليله وإيجاد حلول عملية!", 'assistant');
+                }
+            }, 1000);
+        });
+
+        // إعادة التحقق من الاتصال
+        connectionStatus.addEventListener('click', function() {
+            statusText.textContent = 'جاري الفحص...';
+            checkAPIStatus();
+        });
+    </script>
+</body>
+</html>
