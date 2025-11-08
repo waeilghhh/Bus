@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DeepSeek Chat - تجريبي</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;padding:20px}
+  .box{max-width:700px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.08);overflow:hidden}
+  header{background:linear-gradient(90deg,#10b981,#059669);color:#fff;padding:18px;text-align:center}
+  .messages{height:400px;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .msg{padding:10px 14px;border-radius:12px;max-width:80%}
+  .user{align-self:flex-end;background:#10b981;color:#fff}
+  .ai{align-self:flex-start;background:#eef2f7;color:#111;border:1px solid #e2e8f0}
+  .input-row{display:flex;gap:8px;padding:12px;border-top:1px solid #eee}
+  input[type="text"]{flex:1;padding:10px;border-radius:999px;border:1px solid #ccc;outline:none}
+  button{background:#10b981;color:#fff;border:none;padding:10px 14px;border-radius:999px;cursor:pointer}
+</style>
+</head>
+<body>
+  <div class="box">
+    <header><h2>مساعد DeepSeek (تجريبي)</h2></header>
+
+    <div class="messages" id="messages">
+      <div class="msg ai">🎉 مرحبًا! اكتب رسالة واضغط إرسال.</div>
+    </div>
+
+    <div class="input-row">
+      <input id="input" type="text" placeholder="اكتب رسالتك هنا..." />
+      <button id="send">إرسال</button>
+    </div>
+  </div>
+
+<script>
+const msgs = document.getElementById('messages');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('send');
+
+function add(text, cls){
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.textContent = text;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function send(){
+  const v = input.value.trim();
+  if(!v) return;
+  add(v,'user');
+  input.value = '';
+  sendBtn.disabled = true;
+
+  try{
+    const res = await fetch('/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: [{ role: "user", content: v }] })
+    });
+
+    const data = await res.json();
+    // حاول استخراج الرد بطريقة مرنة
+    let reply = '';
+    if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+      reply = data.choices[0].message.content;
+    } else if (data.output && typeof data.output === 'string') {
+      reply = data.output;
+    } else if (data.raw) {
+      reply = data.raw;
+    } else if (data.error) {
+      reply = "خطأ: " + (data.error.message || JSON.stringify(data.error));
+    } else {
+      reply = "لم يتم استقبال رد واضح من الخادم.";
+    }
+
+    add(reply, 'ai');
+
+  } catch (err) {
+    console.error(err);
+    add('❌ فشل الاتصال بالخادم: ' + err.message, 'ai');
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+sendBtn.addEventListener('click', send);
+input.addEventListener('keypress', e=>{ if(e.key === 'Enter') send(); });
+</script>
+</body>
+</html>
