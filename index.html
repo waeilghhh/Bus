@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مساعد الذكاء الاصطناعي - تجريبي</title>
+<style>
+body{font-family:Arial;margin:20px;background:#f5f5f5}
+#chat{max-width:700px;margin:0 auto;background:#fff;padding:12px;border:1px solid #ddd;height:400px;overflow:auto}
+.user{color:blue;margin:6px 0}
+.ai{color:green;margin:6px 0}
+#input{width:78%;padding:8px}
+#send{padding:8px 12px}
+</style>
+</head>
+<body>
+<h2 style="text-align:center">مساعد الذكاء الاصطناعي (تجريبي)</h2>
+<div id="chat"><div class="ai">AI: مرحبًا! اكتب رسالة لتجربة.</div></div>
+<div style="max-width:700px;margin:12px auto;display:flex;gap:8px">
+  <input id="input" placeholder="اكتب رسالتك..." />
+  <button id="send">إرسال</button>
+</div>
+
+<script>
+const chat = document.getElementById('chat');
+const input = document.getElementById('input');
+const send = document.getElementById('send');
+
+function add(msg, cls){ const d=document.createElement('div'); d.className=cls; d.textContent=msg; chat.appendChild(d); chat.scrollTop=chat.scrollHeight; }
+
+async function sendMessage(){
+  const message = input.value.trim();
+  if(!message) return;
+  add('أنت: '+message,'user');
+  input.value='';
+  try{
+    const res = await fetch('/api/deepseek', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    if(data.choices && data.choices[0] && data.choices[0].message){
+      add('AI: '+data.choices[0].message.content,'ai');
+    } else if(data.error){
+      add('خطأ: '+(typeof data.error === 'string' ? data.error : JSON.stringify(data.error)),'ai');
+    } else {
+      add('خطأ: استجابة غير متوقعة','ai');
+    }
+  } catch(e){
+    add('خطأ: '+e.message,'ai');
+  }
+}
+
+send.addEventListener('click', sendMessage);
+input.addEventListener('keypress', e=>{ if(e.key==='Enter') sendMessage(); });
+</script>
+</body>
+</html>
